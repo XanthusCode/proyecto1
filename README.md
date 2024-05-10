@@ -29,21 +29,13 @@
 2. Devuelve un listado con la ciudad y el teléfono de las oficinas de España.
 
    ```sql
-   DELIMITER //
-   CREATE PROCEDURE ObtenerInformacionOficinasPorPais()
-   BEGIN
-       SELECT c.nombre_ciudad, co.telefono
-       FROM oficina AS o
-       JOIN ubicacion AS u ON o.id_ubicacion = u.id_ubicacion
-       JOIN ciudad AS c ON u.id_ciudad = c.id_ciudad
-       JOIN region AS r ON c.id_region = r.id_region
-       JOIN pais AS p ON r.id_pais = p.id_pais
-       JOIN contacto AS co ON o.id_contacto = co.id_contacto;
-   END //
-   DELIMITER ;
-   
-   
-   CALL ObtenerInformacionOficinasPorPais();
+   SELECT c.nombre_ciudad, co.telefono
+   FROM oficina AS o
+   JOIN ubicacion AS u ON o.id_ubicacion = u.id_ubicacion
+   JOIN ciudad AS c ON u.id_ciudad = c.id_ciudad
+   JOIN region AS r ON c.id_region = r.id_region
+   JOIN pais AS p ON r.id_pais = p.id_pais
+   JOIN contacto AS co ON o.id_contacto = co.id_contacto;
    
    +---------------+-------------------+
    | nombre_ciudad | telefono          |
@@ -59,13 +51,9 @@
 3. Devuelve un listado con el nombre, apellidos y email de los empleados cuyo jefe tiene un código de jefe igual a 7.
 
   ```sql
-  CREATE VIEW cod_Jefe AS
   SELECT nombre, apellido1, apellido2, email
   FROM empleado
   WHERE codigo_jefe = 7;
-  
-  SELECT nombre, apellido1, apellido2, email
-  FROM cod_Jefe;
   
   +--------+-----------+-----------+--------------------------+
   | nombre | apellido1 | apellido2 | email                    |
@@ -79,13 +67,9 @@
 4. Devuelve el nombre del puesto, nombre, apellidos y email del jefe de la empresa.
 
   ```sql
-  CREATE VIEW jefe AS
   SELECT nombre, apellido1, apellido2, email
   FROM empleado
   WHERE puesto = 'Jefe';
-  
-  SELECT nombre, apellido1, apellido2, email
-  FROM jefe;
   
   +--------+-----------+-----------+--------------------------+
   | nombre | apellido1 | apellido2 | email                    |
@@ -99,13 +83,9 @@
 5. Devuelve un listado con el nombre, apellidos y puesto de aquellos empleados que no sean representantes de ventas.
 
   ```sql
-  CREATE VIEW EmpleadosNoVentas AS
   SELECT nombre, apellido1, apellido2, puesto
   FROM empleado
   WHERE puesto <> 'Representante de Ventas';
-  
-  SELECT nombre, apellido1, apellido2, puesto
-  FROM EmpleadosNoVentas;
   
   +--------+-----------+-----------+--------------------------+
   | nombre | apellido1 | apellido2 | puesto                   |
@@ -120,21 +100,13 @@
 6. Devuelve un listado con el nombre de los todos los clientes españoles.
 
    ```sql
-   DELIMITER //
-   CREATE PROCEDURE ObtenerClientesPorPais()
-   BEGIN
-       SELECT cl.nombre_cliente
-       FROM cliente cl
-       JOIN ubicacion u ON cl.id_ubicacion = u.id_ubicacion
-       JOIN ciudad ci ON u.id_ciudad = ci.id_ciudad
-       JOIN region r ON ci.id_region = r.id_region
-       JOIN pais p ON r.id_pais = p.id_pais
-       WHERE p.nombre_pais = 'España';
-   END //
-   DELIMITER ;
-   
-   CALL ObtenerClientesPorPais();
-   
+   SELECT cl.nombre_cliente
+   FROM cliente cl
+   JOIN ubicacion u ON cl.id_ubicacion = u.id_ubicacion
+   JOIN ciudad ci ON u.id_ciudad = ci.id_ciudad
+   JOIN region r ON ci.id_region = r.id_region
+   JOIN pais p ON r.id_pais = p.id_pais
+   WHERE p.nombre_pais = 'España';
    
    +----------------+
    | nombre_cliente |
@@ -143,9 +115,9 @@
    | Juan Jose      |
    +----------------+
    ```
-
    
-
+   
+   
 7. Devuelve un listado con los distintos estados por los que puede pasar un pedido.
 
      ```sql
@@ -360,17 +332,12 @@
       deberá estar ordenado por su precio de venta, mostrando en primer lugar los de mayor precio.
 
       ```sql
-      CREATE VIEW Vista_Productos_Ornamentales AS
       SELECT p.id_producto AS id, p.nombre, p.id_gama , p.id_dimensiones AS dimensiones, p.id_proveedor AS proveedor, p.descripcion, p.id_stock, p.precio_venta
       FROM producto p
       JOIN gama_producto g ON p.id_gama = g.id_gama
       JOIN stock s ON p.id_stock = s.id_stock
       WHERE g.descripcion_text = 'Productos ornamentales para decoración.' AND s.stock_actual > 100
       ORDER BY p.precio_venta DESC;
-      
-      
-      SELECT id, nombre, id_gama, dimensiones, proveedor, descripcion, id_stock, precio_venta 
-      FROM Vista_Productos_Ornamentales;
       
       +-------+--------------------+--------------+-------------+-----------+--------------------------------------+----------+--------------+
       | id    | nombre             | id_gama      | dimensiones | proveedor | descripcion                          | id_stock | precio_venta |
@@ -380,13 +347,13 @@
       | PROD1 | Planta Ornamental  | Ornamentales |           1 |         1 | Planta ornamental de interior.       |        1 |        15.99 |
       +-------+--------------------+--------------+-------------+-----------+--------------------------------------+----------+--------------
       ```
-
+    
       
-
+    
 16. Devuelve un listado con todos los clientes que sean de la ciudad de Madrid y cuyo representante de ventas tenga el código de empleado 11 o 30.
 
       ```sql
-      CREATE VIEW clientes_Madrid_Ventas AS
+      
       SELECT c.codigo_cliente, c.nombre_cliente, c.nombre_contacto, c.apellido_contacto, c.codigo_empleado_rep , c.id_ubicacion
       FROM cliente c
       JOIN cliente_direccion cd ON c.codigo_cliente = cd.codigo_cliente
@@ -395,9 +362,6 @@
       WHERE ci.nombre_ciudad = 'Madrid'
       AND c.codigo_empleado_rep IN (11, 30);
       
-      SELECT codigo_cliente, nombre_cliente, nombre_contacto, apellido_contacto, codigo_empleado_rep, id_ubicacion
-      FROM  clientes_Madrid_Ventas;
-      
       
       +----------------+----------------+-----------------+-------------------+---------------------+--------------+
       | codigo_cliente | nombre_cliente | nombre_contacto | apellido_contacto | codigo_empleado_rep | id_ubicacion |
@@ -405,7 +369,7 @@
       |              3 | Cliente 3      | Contacto 3      | Apellido 3        |                  30 |            3 |
       +----------------+----------------+-----------------+-------------------+---------------------+--------------+
       ```
-
+    
       
 
 
@@ -466,22 +430,13 @@
 4. Devuelve el nombre de los clientes que han hecho pagos y el nombre de sus representantes junto con la ciudad de la oficina a la que pertenece el representante.
 
      ```sql
-     DELIMITER //
-     
-     CREATE PROCEDURE ObtenerClientesConRepresentanteYCiudad()
-     BEGIN
-         SELECT DISTINCT c.nombre_cliente, e.nombre, e.apellido1, ci.nombre_ciudad
-         FROM cliente c
-         JOIN pedido p ON c.codigo_cliente = p.codigo_cliente
-         JOIN empleado e ON c.codigo_empleado_rep = e.codigo_empleado
-         JOIN oficina o ON e.codigo_oficina = o.codigo_oficina
-         JOIN ubicacion u ON o.id_ubicacion = u.id_ubicacion
-         JOIN ciudad ci ON u.id_ciudad = ci.id_ciudad;
-     END //
-     
-     DELIMITER ;
-     
-     CALL ObtenerClientesConRepresentanteYCiudad();
+     SELECT DISTINCT c.nombre_cliente, e.nombre, e.apellido1, ci.nombre_ciudad
+     FROM cliente c
+     JOIN pedido p ON c.codigo_cliente = p.codigo_cliente
+     JOIN empleado e ON c.codigo_empleado_rep = e.codigo_empleado
+     JOIN oficina o ON e.codigo_oficina = o.codigo_oficina
+     JOIN ubicacion u ON o.id_ubicacion = u.id_ubicacion
+     JOIN ciudad ci ON u.id_ciudad = ci.id_ciudad;
      
      +----------------+--------+-----------+---------------+
      | nombre_cliente | nombre | apellido1 | nombre_ciudad |
@@ -489,7 +444,7 @@
      | Martha         | Juan   | Perez     | París         |
      +----------------+--------+-----------+---------------+
      ```
-
+     
 5. Devuelve el nombre de los clientes que no hayan hecho pagos y el nombre de sus representantes junto con la ciudad de la oficina a la que pertenece el representante.
 
      ```sql
@@ -550,22 +505,17 @@
 8. Devuelve un listado con el nombre de los empleados junto con el nombre de sus jefes.
 
      ```sql
-     DELIMITER //
-     CREATE PROCEDURE ActualizarYMostrarEmpleadosConJefes()
-     BEGIN
-         -- Actualizaciones de los códigos de jefe para los empleados 1 y 2
-         UPDATE empleado SET codigo_jefe = 2 WHERE codigo_empleado = 1;
-         UPDATE empleado SET codigo_jefe = 3 WHERE codigo_empleado = 2;
+     UPDATE empleado 
+     SET codigo_jefe = 2 
+     WHERE codigo_empleado = 1;
      
-         -- Selección de los nombres de los empleados y sus jefes
-         SELECT  e1.nombre AS nombre_empleado, e2.nombre AS nombre_jefe
-         FROM empleado AS e1
-         LEFT JOIN empleado AS e2 ON e1.codigo_jefe = e2.codigo_empleado;
-     END //
-     DELIMITER ;
+     UPDATE empleado 
+     SET codigo_jefe = 3 
+     WHERE codigo_empleado = 2;
      
-     CALL ActualizarYMostrarEmpleadosConJefes();
-     
+     SELECT  e1.nombre AS nombre_empleado, e2.nombre AS nombre_jefe
+     FROM empleado AS e1
+     LEFT JOIN empleado AS e2 ON e1.codigo_jefe = e2.codigo_empleado;
      +-----------------+-------------+
      | nombre_empleado | nombre_jefe |
      +-----------------+-------------+
@@ -574,26 +524,22 @@
      | María           | Antonia     |
      +-----------------+-------------+
      ```
-
+     
 9. Devuelve un listado que muestre el nombre de cada empleados, el nombre de su jefe y el nombre del jefe de sus jefe.
 
      ```sql
-     DELIMITER //
-     CREATE PROCEDURE MostrarJerarquiaEmpleados()
-     BEGIN
-         -- Actualizaciones de los códigos de jefe para los empleados 1 y 2
-         UPDATE empleado SET codigo_jefe = 2 WHERE codigo_empleado = 1;
-         UPDATE empleado SET codigo_jefe = 3 WHERE codigo_empleado = 2;
+     UPDATE empleado 
+     SET codigo_jefe = 2 
+     WHERE codigo_empleado = 1;
      
-         -- Selección de los nombres de los empleados, sus jefes y el jefe del jefe
-         SELECT e1.nombre AS nombre_empleado, e2.nombre AS nombre_jefe, e3.nombre AS nombre_jefe_del_jefe
-         FROM empleado AS e1
-         LEFT JOIN empleado AS e2 ON e1.codigo_jefe = e2.codigo_empleado
-         LEFT JOIN empleado AS e3 ON e2.codigo_jefe = e3.codigo_empleado;
-     END //
-     DELIMITER ;
+     UPDATE empleado 
+     SET codigo_jefe = 3 
+     WHERE codigo_empleado = 2;
      
-     CALL MostrarJerarquiaEmpleados();
+     SELECT e1.nombre AS nombre_empleado, e2.nombre AS nombre_jefe, e3.nombre AS nombre_jefe_del_jefe
+     FROM  empleado AS e1
+     LEFT JOIN  empleado AS e2 ON e1.codigo_jefe = e2.codigo_empleado
+     LEFT JOIN empleado AS e3 ON e2.codigo_jefe = e3.codigo_empleado;
      
      +-----------------+-------------+----------------------+
      | nombre_empleado | nombre_jefe | nombre_jefe_del_jefe |
@@ -603,7 +549,7 @@
      | María           | Antonia     | Juan                 |
      +-----------------+-------------+----------------------+
      ```
-
+     
 10. Devuelve el nombre de los clientes a los que no se les ha entregado a tiempo un pedido.
 
      ```sql
@@ -624,7 +570,6 @@
 11. Devuelve un listado de las diferentes gamas de producto que ha comprado cada cliente.
 
       ```sql
-      CREATE VIEW dif_Gamas_Productos AS
       SELECT c.nombre_cliente, gp.descripcion_text 
       FROM  cliente AS c
       JOIN  pedido p ON c.codigo_cliente = p.codigo_cliente
@@ -632,10 +577,6 @@
       JOIN producto AS prod ON dp.id_producto = prod.id_producto
       JOIN gama_producto AS gp ON prod.id_gama = gp.id_gama
       ORDER BY c.nombre_cliente;
-      
-      
-      SELECT nombre_cliente, descripcion_text
-      FROM dif_Gamas_Productos;
       
       +----------------+------------------------------------------+
       | nombre_cliente | descripcion_text                         |
@@ -646,7 +587,7 @@
       | Sara           | Electrodomésticos para el hogar.         |
       +----------------+------------------------------------------+
       ```
-
+    
       
 
 
@@ -690,28 +631,22 @@
 3. Devuelve un listado que muestre los clientes que no han realizado ningún pago y los que no han realizado ningún pedido.
 
      ```sql
-     DELIMITER //
-     CREATE PROCEDURE ObtenerClientesSinPagosNiPedidos()
-     BEGIN
-         -- Clientes sin pagos
-         SELECT nombre_cliente
-         FROM cliente
-         WHERE codigo_cliente NOT IN (
-             SELECT DISTINCT codigo_cliente
-             FROM pedido
-         )
-         UNION
-         -- Clientes sin pedidos
-         SELECT nombre_cliente
-         FROM cliente
-         WHERE codigo_cliente NOT IN (
-             SELECT DISTINCT codigo_cliente
-             FROM pago
-         );
-     END //
-     DELIMITER ;
+     SELECT nombre_cliente
+     FROM cliente
+     WHERE codigo_cliente NOT IN (
+         SELECT DISTINCT codigo_cliente
+         FROM pedido
+     )
      
-     CALL ObtenerClientesSinPagosNiPedidos();
+     UNION
+     
+     
+     SELECT nombre_cliente
+     FROM cliente
+     WHERE codigo_cliente NOT IN (
+         SELECT DISTINCT codigo_cliente
+         FROM pedido
+     );
      
      +----------------+
      | nombre_cliente |
@@ -720,7 +655,7 @@
      | Anatulia       |
      +----------------+
      ```
-
+     
 4. Devuelve un listado que muestre solamente los empleados que no tienen una oficina asociada.
 
      ```sql
@@ -814,7 +749,6 @@
     la compra de algún producto de la gama Frutales.
     
     ```sql
-    CREATE VIEW Detalles_Oficina_Sin_Frutales AS
     SELECT o.codigo_oficina, o.codigo_postal, o.id_contacto, o.id_ubicacion
     FROM oficina o
     WHERE o.codigo_oficina NOT IN (
@@ -831,9 +765,6 @@
         )
     );
     
-    
-    SELECT codigo_oficina, codigo_postal, id_contacto, id_ubicacion
-    FROM Detalles_Oficina_Sin_Frutales;
     
     +----------------+---------------+-------------+--------------+
     | codigo_oficina | codigo_postal | id_contacto | id_ubicacion |
@@ -1038,15 +969,12 @@
 11. Calcula la fecha del primer y último pago realizado por cada uno de los clientes. El listado deberá mostrar el nombre y los apellidos de cada cliente.
     
     ```sql
-    CREATE VIEW PagosClientes AS
     SELECT c.nombre_cliente, c.nombre_contacto, c.apellido_contacto, MIN(p.fecha_pago) AS primera_fecha_pago, MAX(p.fecha_pago) AS ultima_fecha_pago
     FROM cliente AS c
     LEFT JOIN pedido pe ON c.codigo_cliente = pe.codigo_cliente
     LEFT JOIN pago p ON pe.id_pedido = p.id_pedido
     GROUP BY c.nombre_cliente, c.nombre_contacto, c.apellido_contacto;
     
-    SELECT nombre_cliente, nombre_contacto, apellido_contacto, primera_fecha_pago,  ultima_fecha_pago
-    FROM PagosClientes;
     
     +----------------+-----------------+-------------------+--------------------+-------------------+
     | nombre_cliente | nombre_contacto | apellido_contacto | primera_fecha_pago | ultima_fecha_pago |
@@ -1171,22 +1099,12 @@
     facturado con impuestos (21% IVA).
     
     ```sql
-    DELIMITER //
-    CREATE PROCEDURE ventas_Totales()
-    BEGIN
-        SELECT 
-            p.nombre AS nombre_producto,
-            SUM(dp.cantidad) AS unidades_vendidas,
-            SUM(dp.precio_unitario * dp.cantidad) AS total_facturado,
-            SUM(dp.precio_unitario * dp.cantidad * 1.21) AS total_facturado_con_iva
-        FROM  producto p
-        JOIN detalle_pedido dp ON p.id_producto = dp.id_producto
-        GROUP BY p.nombre
-        HAVING SUM(dp.precio_unitario * dp.cantidad) > 3000;
-    END //
-    DELIMITER;
+    SELECT  p.nombre AS nombre_producto, SUM(dp.cantidad) AS unidades_vendidas, SUM(dp.precio_unitario * dp.cantidad) AS total_facturado, SUM(dp.precio_unitario * dp.cantidad * 1.21) AS total_facturado_con_iva
+    FROM  producto p
+    JOIN detalle_pedido dp ON p.id_producto = dp.id_producto
+    GROUP BY p.nombre
+    HAVING SUM(dp.precio_unitario * dp.cantidad) > 3000;
     
-    CALL ventas_Totales();
     +--------------------+-------------------+-----------------+-------------------------+
     | nombre_producto    | unidades_vendidas | total_facturado | total_facturado_con_iva |
     +--------------------+-------------------+-----------------+-------------------------+
@@ -1373,27 +1291,21 @@
 9. Devuelve el nombre del producto que tenga el precio de venta más caro.
 
     ```sql
-    DELIMITER //
-    CREATE PROCEDURE ProductoMasCaro()
-    BEGIN
-        SELECT nombre
-        FROM producto
-        WHERE precio_venta >= ALL (
-            SELECT precio_venta
-            FROM producto);
-    END //
-    DELIMITER ;
+    SELECT nombre
+    FROM producto
+    WHERE precio_venta >= ALL (
+        SELECT precio_venta
+        FROM producto);
     
-    CALL ProductoMasCaro();
     +--------+
     | nombre |
     +--------+
     | Nevera |
     +--------+
     ```
-
     
-
+    
+    
 10. Devuelve el producto que menos unidades tiene en stock.
 
     ```sql
@@ -1511,22 +1423,15 @@
 15. Devuelve el nombre, apellidos, puesto y teléfono de la oficina de aquellos empleados que no sean representante de ventas de ningún cliente.
 
      ```sql
-     DELIMITER //
-     CREATE PROCEDURE EmpleadosSinClientes()
-     BEGIN
-         SELECT e.nombre, e.apellido1, e.apellido2, e.puesto, c.telefono
-         FROM empleado e
-         INNER JOIN contacto c ON e.id_contacto = c.id_contacto
-         LEFT JOIN cliente cl ON e.codigo_empleado = cl.codigo_empleado_rep
-         LEFT JOIN oficina o ON e.codigo_oficina = o.codigo_oficina
-         WHERE cl.codigo_cliente IS NULL OR cl.codigo_cliente NOT IN (
-             SELECT DISTINCT codigo_cliente 
-             FROM cliente 
-             WHERE codigo_empleado_rep = e.codigo_empleado);
-     END;
-     
-     
-     CALL EmpleadosSinClientes();
+     SELECT e.nombre, e.apellido1, e.apellido2, e.puesto, c.telefono
+     FROM empleado e
+     INNER JOIN contacto c ON e.id_contacto = c.id_contacto
+     LEFT JOIN cliente cl ON e.codigo_empleado = cl.codigo_empleado_rep
+     LEFT JOIN oficina o ON e.codigo_oficina = o.codigo_oficina
+     WHERE cl.codigo_cliente IS NULL OR cl.codigo_cliente NOT IN (
+         SELECT DISTINCT codigo_cliente 
+         FROM cliente 
+         WHERE codigo_empleado_rep = e.codigo_empleado);
      
      +--------+-----------+-----------+--------------------------+-----------------+
      | nombre | apellido1 | apellido2 | puesto                   | telefono        |
@@ -1534,13 +1439,12 @@
      | María  | González  | Martínez  | Asistente Administrativo | +49 89 12345678 |
      +--------+-----------+-----------+--------------------------+-----------------+
      ```
-
+    
      
-
+    
 16. Devuelve las oficinas donde no trabajan ninguno de los empleados que hayan sido los representantes de ventas de algún cliente que haya realizado la compra de algún producto de la gama Frutales.
 
      ```sql
-     CREATE VIEW OficinasSinRepresentantesFrutales AS
      SELECT o.codigo_oficina, o.codigo_postal, o.id_contacto, o.id_ubicacion
      FROM oficina o
      LEFT JOIN empleado e ON o.codigo_oficina = e.codigo_oficina
@@ -1553,11 +1457,6 @@
          WHERE prod.id_gama = 'Frutales'
      );
      
-     
-     SELECT codigo_oficina, codigo_postal, id_contacto, id_ubicacion
-     FROM OficinasSinRepresentantesFrutales;
-     
-     
      +----------------+---------------+-------------+--------------+
      | codigo_oficina | codigo_postal | id_contacto | id_ubicacion |
      +----------------+---------------+-------------+--------------+
@@ -1565,9 +1464,9 @@
      | OF3            | 80331         |           3 |            3 |
      +----------------+---------------+-------------+--------------+
      ```
-
+    
      
-
+    
 17. Devuelve un listado con los clientes que han realizado algún pedido pero no han realizado ningún pago.
 
      ```sql
@@ -1702,7 +1601,7 @@
   +----------------+-------------+
   ```
 
-  
+
 2. Devuelve un listado con los nombres de los clientes y el total pagado por cada uno de ellos. Tenga en cuenta que pueden existir clientes que no han realizado ningún pago.
 
   ```sql
@@ -1723,7 +1622,7 @@
   +----------------+--------------+
   ```
 
-  
+
 3. Devuelve el nombre de los clientes que hayan hecho pedidos en 2008 ordenados alfabéticamente de menor a mayor.
 
   ```sql
@@ -1742,22 +1641,18 @@
   +----------------+
   ```
 
-  
+
 4. Devuelve el nombre del cliente, el nombre y primer apellido de su representante de ventas y el número de teléfono de la oficina del representante de ventas, de aquellos clientes que no hayan realizado ningún pago.
 
   ```sql
-  SELECT
-      cl.nombre_cliente AS Nombre_Cliente,
-      CONCAT(emp.nombre, ' ', emp.apellido1) AS Nombre_Representante,
-      cont.telefono AS Telefono_Oficina
+  SELECT cl.nombre_cliente AS Nombre_Cliente, CONCAT(emp.nombre, ' ', emp.apellido1) AS Nombre_Representante, cont.telefono AS Telefono_Oficina
   FROM cliente cl
   INNER JOIN empleado emp ON cl.codigo_empleado_rep = emp.codigo_empleado
   INNER JOIN oficina ofi ON emp.codigo_oficina = ofi.codigo_oficina
   INNER JOIN contacto cont ON ofi.id_contacto = cont.id_contacto
   LEFT JOIN pedido ped ON cl.codigo_cliente = ped.codigo_cliente
   LEFT JOIN pago p ON ped.id_pedido = p.id_pedido
-  WHERE
-      p.id_pago IS NULL;
+  WHERE p.id_pago IS NULL;
   
   
   +----------------+----------------------+-------------------+
@@ -1768,9 +1663,9 @@
   +----------------+----------------------+-------------------+
   ```
 
-  
+
 5. Devuelve el listado de clientes donde aparezca el nombre del cliente, el nombre y primer apellido de su representante de ventas y la ciudad donde
-  está su oficina.
+    está su oficina.
 
   ```sql
   SELECT c.nombre_cliente, e.nombre, e.apellido1, ci.nombre_ciudad AS ciudad_oficina
@@ -1791,21 +1686,16 @@
   +----------------+---------+-----------+----------------+
   ```
 
-  
+
 6. Devuelve el nombre, apellidos, puesto y teléfono de la oficina de aquellos empleados que no sean representante de ventas de ningún cliente.
 
   ```sql
-  CREATE VIEW Empleados_No_Representantes AS
   SELECT emp.nombre AS Nombre, CONCAT(emp.apellido1, ' ', COALESCE(emp.apellido2, '')) AS Apellidos, emp.puesto AS Puesto, cont.telefono AS Telefono_Oficina
   FROM empleado AS emp
   INNER JOIN ficina ofi ON emp.codigo_oficina = ofi.codigo_oficina
   INNER JOIN contacto cont ON ofi.id_contacto = cont.id_contacto 
   LEFT JOIN cliente cl ON emp.codigo_empleado = cl.codigo_empleado_rep
   WHERE cl.codigo_cliente IS NULL;
-  
-  
-  SELECT Nombre, Apellidos, Puesto, Telefono_Oficina
-  FROM Empleados_No_Representantes;
   
   +--------+---------------------+--------------------------+------------------+
   | Nombre | Apellidos           | Puesto                   | Telefono_Oficina |
@@ -1819,7 +1709,6 @@
 7. Devuelve un listado indicando todas las ciudades donde hay oficinas y el número de empleados que tiene.
 
   ```sql
-  CREATE VIEW vista_empleados_por_ciudad AS
   SELECT ci.nombre_ciudad, COUNT(e.codigo_empleado) AS numero_empleados
   FROM ciudad ci
   LEFT JOIN ubicacion u ON ci.id_ciudad = u.id_ciudad
@@ -1827,9 +1716,6 @@
   LEFT JOIN empleado e ON o.codigo_oficina = e.codigo_oficina
   GROUP BY ci.nombre_ciudad;
   
-  
-  SELECT nombre_ciudad, numero_empleados
-  FROM vista_empleados_por_ciudad;
   +---------------+------------------+
   | nombre_ciudad | numero_empleados |
   +---------------+------------------+
@@ -1841,3 +1727,376 @@
 
   
 
+#### Vistas
+
+1. Devuelve un listado con el nombre, apellidos y email de los empleados cuyo jefe tiene un código de jefe igual a 7.
+
+   ```sql
+   CREATE VIEW cod_Jefe AS
+   SELECT nombre, apellido1, apellido2, email
+   FROM empleado
+   WHERE codigo_jefe = 7;
+   
+   SELECT nombre, apellido1, apellido2, email
+   FROM cod_Jefe;
+   ```
+
+   
+
+2. Devuelve el nombre del puesto, nombre, apellidos y email del jefe de la empresa.
+
+   ```sql
+   CREATE VIEW jefe AS
+   SELECT nombre, apellido1, apellido2, email
+   FROM empleado
+   WHERE puesto = 'Jefe';
+   
+   SELECT nombre, apellido1, apellido2, email
+   FROM jefe;
+   ```
+
+
+
+3. Lista  el nombre, apellidos y puesto de aquellos empleados que no sean representantes de ventas.
+
+   ```sql
+   CREATE VIEW EmpleadosNoVentas AS
+   SELECT nombre, apellido1, apellido2, puesto
+   FROM empleado
+   WHERE puesto <> 'Representante de Ventas';
+   
+   SELECT nombre, apellido1, apellido2, puesto
+   FROM EmpleadosNoVentas;
+   ```
+
+   
+
+4. Lista  todos los productos que pertenecen a la gama Ornamentales y que tienen más de 100 unidades en stock. 
+
+   ```sql
+   CREATE VIEW Vista_Productos_Ornamentales AS
+   SELECT p.id_producto AS id, p.nombre, p.id_gama , p.id_dimensiones AS dimensiones, p.id_proveedor AS proveedor, p.descripcion, p.id_stock, p.precio_venta
+   FROM producto p
+   JOIN gama_producto g ON p.id_gama = g.id_gama
+   JOIN stock s ON p.id_stock = s.id_stock
+   WHERE g.descripcion_text = 'Productos ornamentales para decoración.' AND s.stock_actual > 100
+   ORDER BY p.precio_venta DESC;
+   
+   
+   SELECT id, nombre, id_gama, dimensiones, proveedor, descripcion, id_stock, precio_venta 
+   FROM Vista_Productos_Ornamentales;
+   ```
+
+   
+
+5. Lista  todos los clientes que sean de la ciudad de Madrid y que representante de ventas tenga el código de empleado 11 o 30.
+
+   ```sql
+   CREATE VIEW clientes_Madrid_Ventas AS
+   SELECT c.codigo_cliente, c.nombre_cliente, c.nombre_contacto, c.apellido_contacto, c.codigo_empleado_rep , c.id_ubicacion
+   FROM cliente c
+   JOIN cliente_direccion cd ON c.codigo_cliente = cd.codigo_cliente
+   JOIN ubicacion u ON cd.id_ubicacion = u.id_ubicacion
+   JOIN ciudad ci ON u.id_ciudad = ci.id_ciudad
+   WHERE ci.nombre_ciudad = 'Madrid'
+   AND c.codigo_empleado_rep IN (11, 30);
+   
+   SELECT codigo_cliente, nombre_cliente, nombre_contacto, apellido_contacto, codigo_empleado_rep, id_ubicacion
+   FROM  clientes_Madrid_Ventas;
+   ```
+
+   
+
+6. Lista Las oficinas donde no trabajan ninguno de los empleados que hayan sido los representantes de ventas de algún cliente que haya realizado
+   la compra de algún producto de la gama Frutales.
+
+   ```sql
+   CREATE VIEW Detalles_Oficina_Sin_Frutales AS
+   SELECT o.codigo_oficina, o.codigo_postal, o.id_contacto, o.id_ubicacion
+   FROM oficina o
+   WHERE o.codigo_oficina NOT IN (
+       SELECT e.codigo_oficina
+       FROM empleado e
+       WHERE e.codigo_empleado IN (
+           SELECT c.codigo_empleado_rep
+           FROM cliente c
+           JOIN pedido p ON c.codigo_cliente = p.codigo_cliente
+           JOIN detalle_pedido dp ON p.id_pedido = dp.id_pedido
+           JOIN producto pr ON dp.id_producto = pr.id_producto
+           JOIN gama_producto gp ON pr.id_gama = gp.id_gama
+           WHERE gp.descripcion_text = 'Frutales'
+       )
+   );
+   
+   
+   SELECT codigo_oficina, codigo_postal, id_contacto, id_ubicacion
+   FROM Detalles_Oficina_Sin_Frutales;
+   ```
+
+
+
+7. Lista las diferentes gamas de producto que ha comprado cada cliente.
+
+   ```sql
+   CREATE VIEW dif_Gamas_Productos AS
+   SELECT c.nombre_cliente, gp.descripcion_text 
+   FROM  cliente AS c
+   JOIN  pedido p ON c.codigo_cliente = p.codigo_cliente
+   JOIN detalle_pedido dp ON p.id_pedido = dp.id_pedido
+   JOIN producto AS prod ON dp.id_producto = prod.id_producto
+   JOIN gama_producto AS gp ON prod.id_gama = gp.id_gama
+   ORDER BY c.nombre_cliente;
+   
+   
+   SELECT nombre_cliente, descripcion_text
+   FROM dif_Gamas_Productos;
+   ```
+
+
+
+8. Devuelve las oficinas sin empleados que hayan sido representantes de ventas para clientes que compraron productos de la gama Frutales.
+
+   ```sql
+   CREATE VIEW OficinasSinRepresentantesFrutales AS
+   SELECT o.codigo_oficina, o.codigo_postal, o.id_contacto, o.id_ubicacion
+   FROM oficina o
+   LEFT JOIN empleado e ON o.codigo_oficina = e.codigo_oficina
+   WHERE e.codigo_empleado IS NULL OR e.codigo_empleado NOT IN (
+       SELECT DISTINCT c.codigo_empleado_rep
+       FROM cliente c
+       INNER JOIN pedido p ON c.codigo_cliente = p.codigo_cliente
+       INNER JOIN detalle_pedido dp ON p.id_pedido = dp.id_pedido
+       INNER JOIN producto prod ON dp.id_producto = prod.id_producto
+       WHERE prod.id_gama = 'Frutales'
+   );
+   
+   
+   SELECT codigo_oficina, codigo_postal, id_contacto, id_ubicacion
+   FROM OficinasSinRepresentantesFrutales;
+   ```
+
+   
+
+9. Devuelve todos los atributos de la oficina cuando los empleados que no son representante de ventas de ningún cliente.
+
+   ```sql
+   CREATE VIEW Empleados_No_Representantes AS
+   SELECT emp.nombre AS Nombre, CONCAT(emp.apellido1, ' ', COALESCE(emp.apellido2, '')) AS Apellidos, emp.puesto AS Puesto, cont.telefono AS Telefono_Oficina
+   FROM empleado AS emp
+   INNER JOIN ficina ofi ON emp.codigo_oficina = ofi.codigo_oficina
+   INNER JOIN contacto cont ON ofi.id_contacto = cont.id_contacto 
+   LEFT JOIN cliente cl ON emp.codigo_empleado = cl.codigo_empleado_rep
+   WHERE cl.codigo_cliente IS NULL;
+   
+   
+   SELECT Nombre, Apellidos, Puesto, Telefono_Oficina
+   FROM Empleados_No_Representantes;
+   ```
+
+   
+
+10. Lista las ciudades donde hay oficinas
+
+    ```sql
+    CREATE VIEW vista_empleados_por_ciudad AS
+    SELECT ci.nombre_ciudad, COUNT(e.codigo_empleado) AS numero_empleados
+    FROM ciudad ci
+    LEFT JOIN ubicacion u ON ci.id_ciudad = u.id_ciudad
+    LEFT JOIN oficina o ON u.id_ubicacion = o.id_ubicacion
+    LEFT JOIN empleado e ON o.codigo_oficina = e.codigo_oficina
+    GROUP BY ci.nombre_ciudad;
+    
+    
+    SELECT nombre_ciudad, numero_empleados
+    FROM vista_empleados_por_ciudad;
+    ```
+
+    
+
+
+
+#### Procedimientos
+
+1. Procedimiento para crear un nuevo cliente
+
+   ```sql
+   1. DELIMITER //
+      CREATE PROCEDURE CrearCliente(
+          IN p_nombre_cliente VARCHAR(100),
+          IN p_nombre_contacto VARCHAR(100),
+          IN p_apellido_contacto VARCHAR(100),
+          IN p_codigo_empleado_rep INT,
+          IN p_id_ubicacion INT
+      )
+      BEGIN
+          INSERT INTO cliente (nombre_cliente, nombre_contacto, apellido_contacto, codigo_empleado_rep, id_ubicacion) 
+          VALUES (p_nombre_cliente, p_nombre_contacto, p_apellido_contacto, p_codigo_empleado_rep, p_id_ubicacion);
+      END //
+      DELIMITER ;
+   ```
+
+   
+
+2. Procedimiento para actualizar la información de un cliente
+
+   ```sql
+   DELIMITER //
+   CREATE PROCEDURE ActualizarCliente(
+       IN p_codigo_cliente INT,
+       IN p_nombre_cliente VARCHAR(100),
+       IN p_nombre_contacto VARCHAR(100),
+       IN p_apellido_contacto VARCHAR(100),
+       IN p_codigo_empleado_rep INT,
+       IN p_id_ubicacion INT
+   )
+   BEGIN
+       UPDATE cliente
+       SET nombre_cliente = p_nombre_cliente,
+           nombre_contacto = p_nombre_contacto,
+           apellido_contacto = p_apellido_contacto,
+           codigo_empleado_rep = p_codigo_empleado_rep,
+           id_ubicacion = p_id_ubicacion
+       WHERE codigo_cliente = p_codigo_cliente;
+   END //
+   DELIMITER ;
+   ```
+
+
+
+3. Procedimiento para eliminar un cliente por su código
+
+   ```sql
+   DELIMITER //
+   CREATE PROCEDURE EliminarCliente(
+       IN p_codigo_cliente INT
+   )
+   BEGIN
+       DELETE FROM cliente WHERE codigo_cliente = p_codigo_cliente;
+   END //
+   DELIMITER ;
+   ```
+
+
+
+4. Procedimiento para buscar un cliente por su código
+
+   ```sql
+   DELIMITER //
+   CREATE PROCEDURE BuscarClientePorCodigo(
+      IN p_codigo_cliente INT
+   )
+   BEGIN
+      SELECT codigo_cliente, nombre_cliente, nombre_contacto, apellido_contacto, codigo_empleado_rep, id_ubicacion
+      FROM cliente 
+      WHERE codigo_cliente = p_codigo_cliente;
+   END //
+   DELIMITER ;
+   
+   ```
+
+
+
+5. Procedimiento para crear un nuevo producto
+
+   ```sql
+   DELIMITER //
+   CREATE PROCEDURE CrearProducto(
+       IN p_nombre_producto VARCHAR(100),
+       IN p_precio DECIMAL(10, 2),
+       IN p_stock INT
+   )
+   BEGIN
+       INSERT INTO producto (nombre_producto, precio, stock) 
+       VALUES (p_nombre_producto, p_precio, p_stock);
+   END //
+   DELIMITER ;
+   ```
+
+   
+
+6. Procedimiento para actualizar la información de un producto
+
+   ```sql
+   DELIMITER //
+   CREATE PROCEDURE ActualizarProducto(
+       IN p_id_producto INT,
+       IN p_nombre_producto VARCHAR(100),
+       IN p_precio DECIMAL(10, 2),
+       IN p_stock INT
+   )
+   BEGIN
+       UPDATE producto
+       SET nombre_producto = p_nombre_producto,
+           precio = p_precio,
+           stock = p_stock
+       WHERE id_producto = p_id_producto;
+   END //
+   DELIMITER ;
+   ```
+
+   
+
+7. Procedimiento para eliminar un producto por su ID
+
+   ```sql
+   DELIMITER //
+   CREATE PROCEDURE EliminarProducto(
+       IN p_id_producto INT
+   )
+   BEGIN
+       DELETE FROM producto WHERE id_producto = p_id_producto;
+   END //
+   DELIMITER ;
+   ```
+
+   
+
+8. Procedimiento para buscar un producto por su ID
+
+   ```sql
+   DELIMITER //
+   CREATE PROCEDURE BuscarProductoPorID(
+      IN p_id_producto INT
+   )
+   BEGIN
+      SELECT id_producto, nombre, id_gama, id_dimensiones, id_proveedor, descripcion, id_stock
+       precio_venta DECIMAL(15,2) FROM producto WHERE id_producto = p_id_producto;
+   END //
+   DELIMITER ;
+   
+   ```
+
+
+
+9. Procedimiento para eliminar un empleado por su ID
+
+   ```sql
+   DELIMITER //
+   CREATE PROCEDURE EliminarEmpleado(
+       IN p_id_empleado INT
+   )
+   BEGIN
+       DELETE FROM empleado WHERE id_empleado = p_id_empleado;
+   END //
+   DELIMITER ;
+   ```
+
+   
+
+10. Procedimiento para buscar un empleado por su ID
+
+    ```sql
+    DELIMITER //
+    CREATE PROCEDURE BuscarEmpleadoPorID(
+        IN p_id_empleado INT
+    )
+    BEGIN
+        SELECT codigo_empleado, nombre, apellido1, apellido2, codigo_oficina, codigo_jefe, puesto, email, id_contacto,
+        nombre_jefe_del_jefe
+        FROM empleado 
+        WHERE codigo_empleado = p_id_empleado;
+    END //
+    DELIMITER ;
+    ```
+
+    

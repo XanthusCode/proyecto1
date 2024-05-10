@@ -328,11 +328,3 @@ INSERT INTO pago (id_pago, fecha_pago, monto, id_pedido) VALUES
 (6, '2024-04-19', 150.00, 6),
 (7, '2024-04-20', 0.00, 8),
 (8, '2024-04-21', 0.00, 11);
-
-
-
-
-
-
-
-
